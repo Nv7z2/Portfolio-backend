@@ -1,23 +1,27 @@
 import { Router } from 'express';
-import { experiencesDB } from '../db.js';
-import arrayResponse from '../utils/arrayResponse.mjs';
+import { getDatabase } from '../notion.mjs';
+import { formatDate, formatText } from '../utils/formatData.mjs';
 
 const router = Router();
 
 router.get('/experiences', async (req, res) => {
-  await experiencesDB.read();
-  console.log(experiencesDB.data)
-  const experiences = arrayResponse(experiencesDB.data);
+  const db = await getDatabase(process.env.NOTION_EXPERIENCE_DB);
 
-  res.json(experiences);
-});
+  const results = db.results.map(page => {
+    const { Company, Position, Company_Link, Start_date, End_date } =
+      page.properties;
 
-router.get('/experience/:id', async (req, res) => {
-  await experiencesDB.read();
-  const experiences = arrayResponse(experiencesDB.data);
-  const data = experiences.find(exp => exp.id === Number(req.params.id));
+    return {
+      id: page.id,
+      company: formatText(Company.title),
+      position: formatText(Position.rich_text),
+      company_link: Company_Link.url,
+      start_date: formatDate(Start_date.date.start),
+      end_date: formatDate(End_date.date.start),
+    };
+  });
 
-  res.json(data);
+  res.status(200).json(results);
 });
 
 export default router;

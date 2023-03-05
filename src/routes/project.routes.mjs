@@ -1,22 +1,30 @@
 import { Router } from 'express';
-import { projectsDB } from '../db.js';
-import arrayResponse from '../utils/arrayResponse.mjs';
+import { getDatabase } from '../notion.mjs';
+import { formatText } from '../utils/formatData.mjs';
 
 const router = Router();
 
 router.get('/projects', async (req, res) => {
-  await projectsDB.read();
-  const projects = arrayResponse(projectsDB.data);
+  const db = await getDatabase(process.env.NOTION_PROJECTS_DB);
 
-  res.json(projects);
-});
+  const results = db.results.map(page => {
+    const {
+      Link,
+      Name,
+      Description: { rich_text: Description },
+      Tags: { multi_select: tags },
+    } = page.properties;
 
-router.get('/project/:id', async (req, res) => {
-  await projectsDB.read();
-  const projects = arrayResponse(projectsDB.data);
-  const data = projects.find(project => project.id === Number(req.params.id));
+    return {
+      id: page.id,
+      url: Link.url,
+      name: formatText(Name.title),
+      description: formatText(Description),
+      tags: tags.map(tag => tag.name),
+    };
+  });
 
-  res.json(data);
+  res.status(200).json(results);
 });
 
 export default router;
