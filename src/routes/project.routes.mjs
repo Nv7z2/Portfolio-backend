@@ -10,7 +10,8 @@ router.get('/projects', async (req, res) => {
 
   const results = db.results.map(page => {
     const {
-      Link,
+      PreviewLink,
+      GithubLink,
       Name,
       Description: { rich_text: Description },
       Tags: { multi_select: tags },
@@ -18,7 +19,8 @@ router.get('/projects', async (req, res) => {
 
     return {
       id: page.id,
-      link: Link.url,
+      previewLink: PreviewLink.url,
+      githubLink: GithubLink.url,
       title: formatText(Name.title),
       description: formatText(Description),
       tags: tags.map(tag => tag.name),
