@@ -5,7 +5,7 @@ import { formatText } from '../utils/formatData.mjs';
 const router = Router();
 
 router.get('/projects', async (req, res) => {
-  const db = await getDatabase(process.env.NOTION_PROJECTS_DB);
+  const db = await getDatabase({ database: process.env.NOTION_PROJECTS_DB });
 
   const results = db.results.map(page => {
     const {
