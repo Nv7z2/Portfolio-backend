@@ -17,8 +17,8 @@ router.get('/projects', async (req, res) => {
 
     return {
       id: page.id,
-      url: Link.url,
-      name: formatText(Name.title),
+      link: Link.url,
+      title: formatText(Name.title),
       description: formatText(Description),
       tags: tags.map(tag => tag.name),
     };

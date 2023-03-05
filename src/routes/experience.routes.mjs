@@ -15,9 +15,9 @@ router.get('/experiences', async (req, res) => {
       id: page.id,
       company: formatText(Company.title),
       position: formatText(Position.rich_text),
-      company_link: Company_Link.url,
-      start_date: formatDate(Start_date.date.start),
-      end_date: formatDate(End_date.date.start),
+      link: Company_Link.url,
+      startDate: formatDate(Start_date.date.start),
+      endEate: formatDate(End_date.date.start),
     };
   });
 
