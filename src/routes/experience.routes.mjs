@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { logApiCall } from '../middlewares/logCalls.mjs';
 import { getDatabase } from '../notion.mjs';
 import { formatDate, formatText } from '../utils/formatData.mjs';
 
@@ -30,6 +31,7 @@ router.get('/experiences', async (req, res) => {
   });
 
   res.status(200).json(results);
+  logApiCall({ title: 'GET /experiences', description: 'Get all experiences' });
 });
 
 export default router;

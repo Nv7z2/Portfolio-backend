@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { logApiCall } from '../middlewares/logCalls.mjs';
 import { getDatabase } from '../notion.mjs';
 import { formatText } from '../utils/formatData.mjs';
 
@@ -25,6 +26,7 @@ router.get('/projects', async (req, res) => {
   });
 
   res.status(200).json(results);
+  logApiCall({ title: 'GET /projects', description: 'Get all projects' });
 });
 
 export default router;
