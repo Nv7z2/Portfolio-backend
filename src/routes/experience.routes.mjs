@@ -10,7 +10,7 @@ router.get('/experiences', async (req, res) => {
     database: process.env.NOTION_EXPERIENCE_DB,
     sort: [
       {
-        property: 'End_date',
+        property: 'Start_date',
         direction: 'descending',
       },
     ],
@@ -26,7 +26,7 @@ router.get('/experiences', async (req, res) => {
       position: formatText(Position.rich_text),
       link: Company_Link.url,
       startDate: formatDate(Start_date.date.start),
-      endDate: formatDate(End_date.date.start),
+      endDate: End_date.date ? formatDate(End_date.date.start) : 'Present',
     };
   });
 
